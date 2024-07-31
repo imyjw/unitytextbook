@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     float walkForce = 30.0f;
     float maxWalkSpeed = 2.0f;
     Animator animator;
-    float threshold = 0.2f;
+    float threshold = 0.15f;
     void Start()
     {
         Application.targetFrameRate = 60;
@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && this.rigid2D.velocity.y == 0)
         {
+            this.animator.SetTrigger("JumpTrigger");
             this.rigid2D.AddForce(transform.up * this.jumpForce);
         }
 
@@ -43,7 +44,15 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(key, 1, 1);
         }
 
-        this.animator.speed = speedx / 2.0f;
+        if (this.rigid2D.velocity.y == 0)
+        {
+            this.animator.speed = speedx / 2.0f;
+        }
+        else
+        {
+            this.animator.speed = 1.0f;
+        }
+        
 
         if (this.transform.position.y < -10)
         {
@@ -57,5 +66,10 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("°ñ");
         SceneManager.LoadScene("ClearScene");
+    }
+
+    public void RetryButton()
+    {
+        SceneManager.LoadScene("GameScene");
     }
 }
